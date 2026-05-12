@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Кулинарная книга</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>    Кулинарная книга</h1>
+            <p class="subtitle" style="color: #666; margin-bottom: 20px;">  Твоя коллекция лучших рецептов</p>
+            
+            <form class="search-form" method="GET">
+                <input type="text" name="search" placeholder="🔍 Поиск по названию" value="{{ search }}">
+                <button type="submit" class="btn">Найти</button>
+            </form>
+            
+            <div class="button-group">
+                <a href="/add" class="btn">➕ Добавить рецепт</a>
+                <button onclick="getRandomRecipe()" class="btn">🎲 Случайный рецепт</button>
+            </div>
+            
+            {% if search %}
+            <p style="margin-top: 15px; color: #666;">
+                🔎 Результаты поиска: «{{ search }}»
+                <a href="/" style="color: #667eea; margin-left: 10px;">✖ Сбросить</a>
+            </p>
+            {% endif %}
+        </div>
+        
+        <div class="recipe-grid">
+            {% for recipe in recipes %}
+            <div class="recipe-card" onclick="window.location='/recipe/{{ recipe[0] }}'">
+                <div class="recipe-title">{{ recipe[1] }}</div>
+                <div class="recipe-meta">
+                    <span class="badge {% if recipe[3] == 'лёгкая' %}easy{% elif recipe[3] == 'средняя' %}medium{% else %}hard{% endif %}">
+                        {{ recipe[3] }}
+                    </span>
+                    <span>⏰ {{ recipe[2] }} мин</span>
+                </div>
+                <div class="stars small-stars">
+                    {% set rating = recipe[4]|round(1) %}
+                    {% for i in range(5) %}
+                        {% if i < rating|int %}★{% else %}☆{% endif %}
+                    {% endfor %}
+                    ({{ rating }})
+                </div>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <p>🍽️ Пока нет рецептов</p>
+                <p style="margin-top: 10px; font-size: 0.9em;">Нажми «Добавить рецепт», чтобы создать первый!</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="footer">
+            Кулинарная книга | Всего рецептов: {{ recipes|length }}
+        </div>
+    </div>
+    
+    <script>
+        function getRandomRecipe() {
+            fetch('/api/random')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = '/recipe/' + data.recipe.id;
+                    } else {
+                        alert('🍽️ Пока нет рецептов! Добавь первый рецепт :)');
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                    alert('Что-то пошло не так... Попробуй позже');
+                });
+        }
+    </script>
+</body>
+</html>

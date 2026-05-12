@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>➕ Добавить рецепт</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>➕ Новый рецепт</h1>
+            
+            <form method="POST">
+                <div class="form-group">
+                    <label>🍽 Название блюда</label>
+                    <input type="text" name="title" required placeholder="Например: Паста Карбонара">
+                </div>
+                
+                <div class="form-group">
+                    <label>🥕 Ингредиенты</label>
+                    <textarea name="ingredients" required placeholder="Спагетти - 200г&#10;Бекон - 100г&#10;Яйца - 2шт&#10;Пармезан - 50г"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>📖 Инструкция приготовления</label>
+                    <textarea name="instruction" required placeholder="1. Отварить спагетти...&#10;2. Обжарить бекон..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>⏰ Время приготовления (минуты)</label>
+                    <input type="number" name="time" value="30" required min="1" max="999">
+                </div>
+                
+                <div class="form-group">
+                    <label>⭐ Сложность</label>
+                    <select name="difficulty">
+                        <option value="лёгкая">🍃 Лёгкая</option>
+                        <option value="средняя" selected>⚡ Средняя</option>
+                        <option value="сложная">🔥 Сложная</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn">✨ Сохранить рецепт</button>
+            </form>
+            
+            <a href="/" class="back-link">← На главную</a>
+        </div>
+    </div>
+</body>
+</html>
